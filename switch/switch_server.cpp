@@ -1,33 +1,50 @@
 #include <iostream>
 #include <memory>
-#include <string>
 #include <vector>
-
 #include <grpcpp/grpcpp.h>
 #include "gradient.grpc.pb.h"
+#include <torch/torch.h> 
 
 using grpc::Server;
-using grpc::ServerBuilder;
 using grpc::ServerContext;
+using grpc::ServerWriter;
 using grpc::Status;
+using gradient::GradientService;
 using gradient::GradientRequest;
 using gradient::GradientReply;
-using gradient::GradientService;
 
 class GradientServiceImpl final : public GradientService::Service {
-    std::vector<float> buffer;
+public:
+    Status StreamGradients(ServerContext* context, grpc::ServerReader<GradientRequest>* reader, GradientReply* reply) override {
+        // Hold the aggregated gradient
+        std::vector<float> aggregated_gradient;
 
-    Status SendGradient(ServerContext* context, const GradientRequest* request,
-                        GradientReply* reply) override {
-        std::cout << "Received gradient from " << request->worker_id() << std::endl;
+        GradientRequest request;
+        // Read the stream of gradients from the client
+        while (reader->Read(&request)) {
+            std::cout << "Received gradient from worker: " << request.worker_id() << std::endl;
 
-        for (float val : request->gradients()) {
-            buffer.push_back(val);
+            // Aggregate gradients here (e.g., sum)
+            for (float grad : request.gradients()) {
+                aggregated_gradient.push_back(grad); // For simplicity, just pushing in this case
+            }
         }
 
-        std::cout << "Current buffer size: " << buffer.size() << std::endl;
+        // Here, aggregate the gradients using PyTorch (if needed) or any other method
+        std::cout << "Aggregated gradient size: " << aggregated_gradient.size() << std::endl;
 
-        reply->set_status("Received");
+        // Optionally: Apply aggregation logic, such as mean or all-reduce
+        // torch::Tensor tensor = torch::tensor(aggregated_gradient);
+        // torch::Tensor mean_tensor = tensor.mean();
+
+        // Prepare the response: sending back an acknowledgment and updated parameters (optional)
+        reply->set_status("Received and Aggregated");
+        
+        // Example: Send back aggregated parameters (just returning the same ones for now)
+        for (auto grad : aggregated_gradient) {
+            reply->add_updated_params(grad);
+        }
+
         return Status::OK;
     }
 };
@@ -36,13 +53,12 @@ void RunServer() {
     std::string server_address("0.0.0.0:50051");
     GradientServiceImpl service;
 
-    ServerBuilder builder;
+    grpc::ServerBuilder builder;
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
     builder.RegisterService(&service);
 
     std::unique_ptr<Server> server(builder.BuildAndStart());
-    std::cout << "Switch server listening on " << server_address << std::endl;
-
+    std::cout << "Server listening on " << server_address << std::endl;
     server->Wait();
 }
 

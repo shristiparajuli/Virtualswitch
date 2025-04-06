@@ -215,6 +215,15 @@ CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//The directory containing a CMake configuration file for Caffe2.
+Caffe2_DIR:PATH=/home/shristi/torch/share/cmake/Caffe2
+
+//The directory containing a CMake configuration file for MKLDNN.
+MKLDNN_DIR:PATH=MKLDNN_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for MKL.
+MKL_DIR:PATH=MKL_DIR-NOTFOUND
+
 //Path to a library.
 OPENSSL_CRYPTO_LIBRARY:FILEPATH=/home/shristi/grpc/install/lib/libcrypto.so
 
@@ -233,11 +242,23 @@ PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
 //The directory containing a CMake configuration file for Protobuf.
 Protobuf_DIR:PATH=/home/shristi/grpc/install/lib/cmake/protobuf
 
+//Path to a library.
+TORCH_LIBRARY:FILEPATH=/home/shristi/torch/lib/libtorch.so
+
+//The directory containing a CMake configuration file for Torch.
+Torch_DIR:PATH=/home/shristi/torch/share/cmake/Torch
+
 //The directory containing a CMake configuration file for absl.
 absl_DIR:PATH=/home/shristi/grpc/install/lib/cmake/absl
 
+//Path to a library.
+c10_LIBRARY:FILEPATH=/home/shristi/torch/lib/libc10.so
+
 //The directory containing a CMake configuration file for gRPC.
 gRPC_DIR:PATH=/home/shristi/grpc/install/lib/cmake/grpc
+
+//Path to a library.
+kineto_LIBRARY:FILEPATH=/home/shristi/torch/lib/libkineto.a
 
 //Path to a library.
 pkgcfg_lib__OPENSSL_crypto:FILEPATH=/usr/lib/x86_64-linux-gnu/libcrypto.so
@@ -419,6 +440,8 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 FIND_PACKAGE_MESSAGE_DETAILS_OpenSSL:INTERNAL=[/home/shristi/grpc/install/lib/libcrypto.so][/usr/include][c ][v3.3.1()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+//Details about finding Torch
+FIND_PACKAGE_MESSAGE_DETAILS_Torch:INTERNAL=[/home/shristi/torch/lib/libtorch.so][/home/shristi/torch/include;/home/shristi/torch/include/torch/csrc/api/include][v()]
 //ADVANCED property for variable: OPENSSL_CRYPTO_LIBRARY
 OPENSSL_CRYPTO_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENSSL_INCLUDE_DIR

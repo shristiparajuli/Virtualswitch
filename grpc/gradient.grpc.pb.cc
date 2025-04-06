@@ -22,7 +22,7 @@
 namespace gradient {
 
 static const char* GradientService_method_names[] = {
-  "/gradient.GradientService/SendGradient",
+  "/gradient.GradientService/StreamGradients",
 };
 
 std::unique_ptr< GradientService::Stub> GradientService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -32,51 +32,44 @@ std::unique_ptr< GradientService::Stub> GradientService::NewStub(const std::shar
 }
 
 GradientService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
-  : channel_(channel), rpcmethod_SendGradient_(GradientService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  : channel_(channel), rpcmethod_StreamGradients_(GradientService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::CLIENT_STREAMING, channel)
   {}
 
-::grpc::Status GradientService::Stub::SendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::gradient::GradientReply* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::gradient::GradientRequest, ::gradient::GradientReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_SendGradient_, context, request, response);
+::grpc::ClientWriter< ::gradient::GradientRequest>* GradientService::Stub::StreamGradientsRaw(::grpc::ClientContext* context, ::gradient::GradientReply* response) {
+  return ::grpc::internal::ClientWriterFactory< ::gradient::GradientRequest>::Create(channel_.get(), rpcmethod_StreamGradients_, context, response);
 }
 
-void GradientService::Stub::async::SendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest* request, ::gradient::GradientReply* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::gradient::GradientRequest, ::gradient::GradientReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SendGradient_, context, request, response, std::move(f));
+void GradientService::Stub::async::StreamGradients(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::ClientWriteReactor< ::gradient::GradientRequest>* reactor) {
+  ::grpc::internal::ClientCallbackWriterFactory< ::gradient::GradientRequest>::Create(stub_->channel_.get(), stub_->rpcmethod_StreamGradients_, context, response, reactor);
 }
 
-void GradientService::Stub::async::SendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest* request, ::gradient::GradientReply* response, ::grpc::ClientUnaryReactor* reactor) {
-  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SendGradient_, context, request, response, reactor);
+::grpc::ClientAsyncWriter< ::gradient::GradientRequest>* GradientService::Stub::AsyncStreamGradientsRaw(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::CompletionQueue* cq, void* tag) {
+  return ::grpc::internal::ClientAsyncWriterFactory< ::gradient::GradientRequest>::Create(channel_.get(), cq, rpcmethod_StreamGradients_, context, response, true, tag);
 }
 
-::grpc::ClientAsyncResponseReader< ::gradient::GradientReply>* GradientService::Stub::PrepareAsyncSendGradientRaw(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::gradient::GradientReply, ::gradient::GradientRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_SendGradient_, context, request);
-}
-
-::grpc::ClientAsyncResponseReader< ::gradient::GradientReply>* GradientService::Stub::AsyncSendGradientRaw(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::grpc::CompletionQueue* cq) {
-  auto* result =
-    this->PrepareAsyncSendGradientRaw(context, request, cq);
-  result->StartCall();
-  return result;
+::grpc::ClientAsyncWriter< ::gradient::GradientRequest>* GradientService::Stub::PrepareAsyncStreamGradientsRaw(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncWriterFactory< ::gradient::GradientRequest>::Create(channel_.get(), cq, rpcmethod_StreamGradients_, context, response, false, nullptr);
 }
 
 GradientService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       GradientService_method_names[0],
-      ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< GradientService::Service, ::gradient::GradientRequest, ::gradient::GradientReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      ::grpc::internal::RpcMethod::CLIENT_STREAMING,
+      new ::grpc::internal::ClientStreamingHandler< GradientService::Service, ::gradient::GradientRequest, ::gradient::GradientReply>(
           [](GradientService::Service* service,
              ::grpc::ServerContext* ctx,
-             const ::gradient::GradientRequest* req,
+             ::grpc::ServerReader<::gradient::GradientRequest>* reader,
              ::gradient::GradientReply* resp) {
-               return service->SendGradient(ctx, req, resp);
+               return service->StreamGradients(ctx, reader, resp);
              }, this)));
 }
 
 GradientService::Service::~Service() {
 }
 
-::grpc::Status GradientService::Service::SendGradient(::grpc::ServerContext* context, const ::gradient::GradientRequest* request, ::gradient::GradientReply* response) {
+::grpc::Status GradientService::Service::StreamGradients(::grpc::ServerContext* context, ::grpc::ServerReader< ::gradient::GradientRequest>* reader, ::gradient::GradientReply* response) {
   (void) context;
-  (void) request;
+  (void) reader;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }

@@ -200,10 +200,10 @@ class GradientRequest final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kGradientsFieldNumber = 1,
-    kWorkerIdFieldNumber = 2,
+    kGradientsFieldNumber = 2,
+    kWorkerIdFieldNumber = 1,
   };
-  // repeated float gradients = 1;
+  // repeated float gradients = 2;
   int gradients_size() const;
   private:
   int _internal_gradients_size() const;
@@ -223,7 +223,7 @@ class GradientRequest final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>* _internal_mutable_gradients();
 
   public:
-  // string worker_id = 2;
+  // string worker_id = 1;
   void clear_worker_id() ;
   const std::string& worker_id() const;
 
@@ -387,8 +387,29 @@ class GradientReply final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kUpdatedParamsFieldNumber = 2,
     kStatusFieldNumber = 1,
   };
+  // repeated float updated_params = 2;
+  int updated_params_size() const;
+  private:
+  int _internal_updated_params_size() const;
+
+  public:
+  void clear_updated_params() ;
+  float updated_params(int index) const;
+  void set_updated_params(int index, float value);
+  void add_updated_params(float value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>& updated_params() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>* mutable_updated_params();
+
+  private:
+  float _internal_updated_params(int index) const;
+  void _internal_add_updated_params(float value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>& _internal_updated_params() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>* _internal_mutable_updated_params();
+
+  public:
   // string status = 1;
   void clear_status() ;
   const std::string& status() const;
@@ -417,6 +438,7 @@ class GradientReply final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedField<float> updated_params_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr status_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -440,7 +462,7 @@ class GradientReply final :
 
 // GradientRequest
 
-// repeated float gradients = 1;
+// repeated float gradients = 2;
 inline int GradientRequest::_internal_gradients_size() const {
   return _impl_.gradients_.size();
 }
@@ -484,7 +506,7 @@ inline ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>* GradientRequest::_internal
   return &_impl_.gradients_;
 }
 
-// string worker_id = 2;
+// string worker_id = 1;
 inline void GradientRequest::clear_worker_id() {
   _impl_.worker_id_.ClearToEmpty();
 }
@@ -580,6 +602,50 @@ inline void GradientReply::set_allocated_status(std::string* value) {
         }
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:gradient.GradientReply.status)
+}
+
+// repeated float updated_params = 2;
+inline int GradientReply::_internal_updated_params_size() const {
+  return _impl_.updated_params_.size();
+}
+inline int GradientReply::updated_params_size() const {
+  return _internal_updated_params_size();
+}
+inline void GradientReply::clear_updated_params() {
+  _internal_mutable_updated_params()->Clear();
+}
+inline float GradientReply::updated_params(int index) const {
+  // @@protoc_insertion_point(field_get:gradient.GradientReply.updated_params)
+  return _internal_updated_params(index);
+}
+inline void GradientReply::set_updated_params(int index, float value) {
+  _internal_mutable_updated_params()->Set(index, value);
+  // @@protoc_insertion_point(field_set:gradient.GradientReply.updated_params)
+}
+inline void GradientReply::add_updated_params(float value) {
+  _internal_add_updated_params(value);
+  // @@protoc_insertion_point(field_add:gradient.GradientReply.updated_params)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>& GradientReply::updated_params() const {
+  // @@protoc_insertion_point(field_list:gradient.GradientReply.updated_params)
+  return _internal_updated_params();
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>* GradientReply::mutable_updated_params() {
+  // @@protoc_insertion_point(field_mutable_list:gradient.GradientReply.updated_params)
+  return _internal_mutable_updated_params();
+}
+
+inline float GradientReply::_internal_updated_params(int index) const {
+  return _internal_updated_params().Get(index);
+}
+inline void GradientReply::_internal_add_updated_params(float value) {
+  _internal_mutable_updated_params()->Add(value);
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>& GradientReply::_internal_updated_params() const {
+  return _impl_.updated_params_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField<float>* GradientReply::_internal_mutable_updated_params() {
+  return &_impl_.updated_params_;
 }
 
 #ifdef __GNUC__

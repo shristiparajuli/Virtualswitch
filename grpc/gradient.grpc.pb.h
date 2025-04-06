@@ -35,41 +35,44 @@ class GradientService final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    virtual ::grpc::Status SendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::gradient::GradientReply* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::gradient::GradientReply>> AsyncSendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::gradient::GradientReply>>(AsyncSendGradientRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientWriterInterface< ::gradient::GradientRequest>> StreamGradients(::grpc::ClientContext* context, ::gradient::GradientReply* response) {
+      return std::unique_ptr< ::grpc::ClientWriterInterface< ::gradient::GradientRequest>>(StreamGradientsRaw(context, response));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::gradient::GradientReply>> PrepareAsyncSendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::gradient::GradientReply>>(PrepareAsyncSendGradientRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::gradient::GradientRequest>> AsyncStreamGradients(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::gradient::GradientRequest>>(AsyncStreamGradientsRaw(context, response, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::gradient::GradientRequest>> PrepareAsyncStreamGradients(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::gradient::GradientRequest>>(PrepareAsyncStreamGradientsRaw(context, response, cq));
     }
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void SendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest* request, ::gradient::GradientReply* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void SendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest* request, ::gradient::GradientReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void StreamGradients(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::ClientWriteReactor< ::gradient::GradientRequest>* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::gradient::GradientReply>* AsyncSendGradientRaw(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::gradient::GradientReply>* PrepareAsyncSendGradientRaw(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientWriterInterface< ::gradient::GradientRequest>* StreamGradientsRaw(::grpc::ClientContext* context, ::gradient::GradientReply* response) = 0;
+    virtual ::grpc::ClientAsyncWriterInterface< ::gradient::GradientRequest>* AsyncStreamGradientsRaw(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncWriterInterface< ::gradient::GradientRequest>* PrepareAsyncStreamGradientsRaw(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    ::grpc::Status SendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::gradient::GradientReply* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::gradient::GradientReply>> AsyncSendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::gradient::GradientReply>>(AsyncSendGradientRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientWriter< ::gradient::GradientRequest>> StreamGradients(::grpc::ClientContext* context, ::gradient::GradientReply* response) {
+      return std::unique_ptr< ::grpc::ClientWriter< ::gradient::GradientRequest>>(StreamGradientsRaw(context, response));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::gradient::GradientReply>> PrepareAsyncSendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::gradient::GradientReply>>(PrepareAsyncSendGradientRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncWriter< ::gradient::GradientRequest>> AsyncStreamGradients(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncWriter< ::gradient::GradientRequest>>(AsyncStreamGradientsRaw(context, response, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncWriter< ::gradient::GradientRequest>> PrepareAsyncStreamGradients(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncWriter< ::gradient::GradientRequest>>(PrepareAsyncStreamGradientsRaw(context, response, cq));
     }
     class async final :
       public StubInterface::async_interface {
      public:
-      void SendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest* request, ::gradient::GradientReply* response, std::function<void(::grpc::Status)>) override;
-      void SendGradient(::grpc::ClientContext* context, const ::gradient::GradientRequest* request, ::gradient::GradientReply* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void StreamGradients(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::ClientWriteReactor< ::gradient::GradientRequest>* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -81,9 +84,10 @@ class GradientService final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientAsyncResponseReader< ::gradient::GradientReply>* AsyncSendGradientRaw(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::gradient::GradientReply>* PrepareAsyncSendGradientRaw(::grpc::ClientContext* context, const ::gradient::GradientRequest& request, ::grpc::CompletionQueue* cq) override;
-    const ::grpc::internal::RpcMethod rpcmethod_SendGradient_;
+    ::grpc::ClientWriter< ::gradient::GradientRequest>* StreamGradientsRaw(::grpc::ClientContext* context, ::gradient::GradientReply* response) override;
+    ::grpc::ClientAsyncWriter< ::gradient::GradientRequest>* AsyncStreamGradientsRaw(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientAsyncWriter< ::gradient::GradientRequest>* PrepareAsyncStreamGradientsRaw(::grpc::ClientContext* context, ::gradient::GradientReply* response, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_StreamGradients_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -91,147 +95,115 @@ class GradientService final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status SendGradient(::grpc::ServerContext* context, const ::gradient::GradientRequest* request, ::gradient::GradientReply* response);
+    virtual ::grpc::Status StreamGradients(::grpc::ServerContext* context, ::grpc::ServerReader< ::gradient::GradientRequest>* reader, ::gradient::GradientReply* response);
   };
   template <class BaseClass>
-  class WithAsyncMethod_SendGradient : public BaseClass {
+  class WithAsyncMethod_StreamGradients : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithAsyncMethod_SendGradient() {
+    WithAsyncMethod_StreamGradients() {
       ::grpc::Service::MarkMethodAsync(0);
     }
-    ~WithAsyncMethod_SendGradient() override {
+    ~WithAsyncMethod_StreamGradients() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SendGradient(::grpc::ServerContext* /*context*/, const ::gradient::GradientRequest* /*request*/, ::gradient::GradientReply* /*response*/) override {
+    ::grpc::Status StreamGradients(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::gradient::GradientRequest>* /*reader*/, ::gradient::GradientReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestSendGradient(::grpc::ServerContext* context, ::gradient::GradientRequest* request, ::grpc::ServerAsyncResponseWriter< ::gradient::GradientReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestStreamGradients(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::gradient::GradientReply, ::gradient::GradientRequest>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncClientStreaming(0, context, reader, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_SendGradient<Service > AsyncService;
+  typedef WithAsyncMethod_StreamGradients<Service > AsyncService;
   template <class BaseClass>
-  class WithCallbackMethod_SendGradient : public BaseClass {
+  class WithCallbackMethod_StreamGradients : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithCallbackMethod_SendGradient() {
+    WithCallbackMethod_StreamGradients() {
       ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::gradient::GradientRequest, ::gradient::GradientReply>(
+          new ::grpc::internal::CallbackClientStreamingHandler< ::gradient::GradientRequest, ::gradient::GradientReply>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::gradient::GradientRequest* request, ::gradient::GradientReply* response) { return this->SendGradient(context, request, response); }));}
-    void SetMessageAllocatorFor_SendGradient(
-        ::grpc::MessageAllocator< ::gradient::GradientRequest, ::gradient::GradientReply>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::gradient::GradientRequest, ::gradient::GradientReply>*>(handler)
-              ->SetMessageAllocator(allocator);
+                   ::grpc::CallbackServerContext* context, ::gradient::GradientReply* response) { return this->StreamGradients(context, response); }));
     }
-    ~WithCallbackMethod_SendGradient() override {
+    ~WithCallbackMethod_StreamGradients() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SendGradient(::grpc::ServerContext* /*context*/, const ::gradient::GradientRequest* /*request*/, ::gradient::GradientReply* /*response*/) override {
+    ::grpc::Status StreamGradients(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::gradient::GradientRequest>* /*reader*/, ::gradient::GradientReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    virtual ::grpc::ServerUnaryReactor* SendGradient(
-      ::grpc::CallbackServerContext* /*context*/, const ::gradient::GradientRequest* /*request*/, ::gradient::GradientReply* /*response*/)  { return nullptr; }
+    virtual ::grpc::ServerReadReactor< ::gradient::GradientRequest>* StreamGradients(
+      ::grpc::CallbackServerContext* /*context*/, ::gradient::GradientReply* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_SendGradient<Service > CallbackService;
+  typedef WithCallbackMethod_StreamGradients<Service > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
-  class WithGenericMethod_SendGradient : public BaseClass {
+  class WithGenericMethod_StreamGradients : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithGenericMethod_SendGradient() {
+    WithGenericMethod_StreamGradients() {
       ::grpc::Service::MarkMethodGeneric(0);
     }
-    ~WithGenericMethod_SendGradient() override {
+    ~WithGenericMethod_StreamGradients() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SendGradient(::grpc::ServerContext* /*context*/, const ::gradient::GradientRequest* /*request*/, ::gradient::GradientReply* /*response*/) override {
+    ::grpc::Status StreamGradients(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::gradient::GradientRequest>* /*reader*/, ::gradient::GradientReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
   };
   template <class BaseClass>
-  class WithRawMethod_SendGradient : public BaseClass {
+  class WithRawMethod_StreamGradients : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithRawMethod_SendGradient() {
+    WithRawMethod_StreamGradients() {
       ::grpc::Service::MarkMethodRaw(0);
     }
-    ~WithRawMethod_SendGradient() override {
+    ~WithRawMethod_StreamGradients() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SendGradient(::grpc::ServerContext* /*context*/, const ::gradient::GradientRequest* /*request*/, ::gradient::GradientReply* /*response*/) override {
+    ::grpc::Status StreamGradients(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::gradient::GradientRequest>* /*reader*/, ::gradient::GradientReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestSendGradient(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestStreamGradients(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::grpc::ByteBuffer, ::grpc::ByteBuffer>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncClientStreaming(0, context, reader, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
-  class WithRawCallbackMethod_SendGradient : public BaseClass {
+  class WithRawCallbackMethod_StreamGradients : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithRawCallbackMethod_SendGradient() {
+    WithRawCallbackMethod_StreamGradients() {
       ::grpc::Service::MarkMethodRawCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+          new ::grpc::internal::CallbackClientStreamingHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SendGradient(context, request, response); }));
+                   ::grpc::CallbackServerContext* context, ::grpc::ByteBuffer* response) { return this->StreamGradients(context, response); }));
     }
-    ~WithRawCallbackMethod_SendGradient() override {
+    ~WithRawCallbackMethod_StreamGradients() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SendGradient(::grpc::ServerContext* /*context*/, const ::gradient::GradientRequest* /*request*/, ::gradient::GradientReply* /*response*/) override {
+    ::grpc::Status StreamGradients(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::gradient::GradientRequest>* /*reader*/, ::gradient::GradientReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    virtual ::grpc::ServerUnaryReactor* SendGradient(
-      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+    virtual ::grpc::ServerReadReactor< ::grpc::ByteBuffer>* StreamGradients(
+      ::grpc::CallbackServerContext* /*context*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
-  template <class BaseClass>
-  class WithStreamedUnaryMethod_SendGradient : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithStreamedUnaryMethod_SendGradient() {
-      ::grpc::Service::MarkMethodStreamed(0,
-        new ::grpc::internal::StreamedUnaryHandler<
-          ::gradient::GradientRequest, ::gradient::GradientReply>(
-            [this](::grpc::ServerContext* context,
-                   ::grpc::ServerUnaryStreamer<
-                     ::gradient::GradientRequest, ::gradient::GradientReply>* streamer) {
-                       return this->StreamedSendGradient(context,
-                         streamer);
-                  }));
-    }
-    ~WithStreamedUnaryMethod_SendGradient() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable regular version of this method
-    ::grpc::Status SendGradient(::grpc::ServerContext* /*context*/, const ::gradient::GradientRequest* /*request*/, ::gradient::GradientReply* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedSendGradient(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::gradient::GradientRequest,::gradient::GradientReply>* server_unary_streamer) = 0;
-  };
-  typedef WithStreamedUnaryMethod_SendGradient<Service > StreamedUnaryService;
+  typedef Service StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_SendGradient<Service > StreamedService;
+  typedef Service StreamedService;
 };
 
 }  // namespace gradient

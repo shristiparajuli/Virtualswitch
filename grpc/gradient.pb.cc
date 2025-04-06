@@ -42,7 +42,9 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 template <typename>
 PROTOBUF_CONSTEXPR GradientReply::GradientReply(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.status_)*/ {
+    /*decltype(_impl_.updated_params_)*/ {}
+
+  , /*decltype(_impl_.status_)*/ {
     &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
   }
 
@@ -84,6 +86,7 @@ const ::uint32_t TableStruct_gradient_2eproto::offsets[] PROTOBUF_SECTION_VARIAB
     ~0u,  // no _split_
     ~0u,  // no sizeof(Split)
     PROTOBUF_FIELD_OFFSET(::gradient::GradientReply, _impl_.status_),
+    PROTOBUF_FIELD_OFFSET(::gradient::GradientReply, _impl_.updated_params_),
 };
 
 static const ::_pbi::MigrationSchema
@@ -98,17 +101,17 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 const char descriptor_table_protodef_gradient_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\n\016gradient.proto\022\010gradient\"7\n\017GradientRe"
-    "quest\022\021\n\tgradients\030\001 \003(\002\022\021\n\tworker_id\030\002 "
-    "\001(\t\"\037\n\rGradientReply\022\016\n\006status\030\001 \001(\t2U\n\017"
-    "GradientService\022B\n\014SendGradient\022\031.gradie"
-    "nt.GradientRequest\032\027.gradient.GradientRe"
-    "plyb\006proto3"
+    "quest\022\021\n\tgradients\030\002 \003(\002\022\021\n\tworker_id\030\001 "
+    "\001(\t\"7\n\rGradientReply\022\016\n\006status\030\001 \001(\t\022\026\n\016"
+    "updated_params\030\002 \003(\0022Z\n\017GradientService\022"
+    "G\n\017StreamGradients\022\031.gradient.GradientRe"
+    "quest\032\027.gradient.GradientReply(\001b\006proto3"
 };
 static ::absl::once_flag descriptor_table_gradient_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_gradient_2eproto = {
     false,
     false,
-    211,
+    240,
     descriptor_table_protodef_gradient_2eproto,
     "gradient.proto",
     &descriptor_table_gradient_2eproto_once,
@@ -224,25 +227,25 @@ const char* GradientRequest::_InternalParse(const char* ptr, ::_pbi::ParseContex
     ::uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated float gradients = 1;
+      // string worker_id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedFloatParser(_internal_mutable_gradients(), ptr, ctx);
-          CHK_(ptr);
-        } else if (static_cast<::uint8_t>(tag) == 13) {
-          _internal_add_gradients(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr));
-          ptr += sizeof(float);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // string worker_id = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
           auto str = _internal_mutable_worker_id();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "gradient.GradientRequest.worker_id"));
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // repeated float gradients = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedFloatParser(_internal_mutable_gradients(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<::uint8_t>(tag) == 21) {
+          _internal_add_gradients(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr));
+          ptr += sizeof(float);
         } else {
           goto handle_unusual;
         }
@@ -276,17 +279,17 @@ failure:
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated float gradients = 1;
-  if (this->_internal_gradients_size() > 0) {
-    target = stream->WriteFixedPacked(1, _internal_gradients(), target);
-  }
-
-  // string worker_id = 2;
+  // string worker_id = 1;
   if (!this->_internal_worker_id().empty()) {
     const std::string& _s = this->_internal_worker_id();
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
         _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "gradient.GradientRequest.worker_id");
-    target = stream->WriteStringMaybeAliased(2, _s, target);
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // repeated float gradients = 2;
+  if (this->_internal_gradients_size() > 0) {
+    target = stream->WriteFixedPacked(2, _internal_gradients(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -305,7 +308,7 @@ failure:
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated float gradients = 1;
+  // repeated float gradients = 2;
   {
     std::size_t data_size = std::size_t{4} *
         ::_pbi::FromIntSize(this->_internal_gradients_size())
@@ -318,7 +321,7 @@ failure:
     total_size += tag_size + data_size;
   }
 
-  // string worker_id = 2;
+  // string worker_id = 1;
   if (!this->_internal_worker_id().empty()) {
     total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
                                     this->_internal_worker_id());
@@ -390,7 +393,9 @@ GradientReply::GradientReply(const GradientReply& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   GradientReply* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.status_) {}
+      decltype(_impl_.updated_params_) { from._impl_.updated_params_ }
+
+    , decltype(_impl_.status_) {}
 
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -408,7 +413,9 @@ GradientReply::GradientReply(const GradientReply& from)
 inline void GradientReply::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.status_) {}
+      decltype(_impl_.updated_params_) { arena }
+
+    , decltype(_impl_.status_) {}
 
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -429,6 +436,7 @@ GradientReply::~GradientReply() {
 
 inline void GradientReply::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.updated_params_.~RepeatedField();
   _impl_.status_.Destroy();
 }
 
@@ -442,6 +450,7 @@ void GradientReply::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _internal_mutable_updated_params()->Clear();
   _impl_.status_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -459,6 +468,18 @@ const char* GradientReply::_InternalParse(const char* ptr, ::_pbi::ParseContext*
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "gradient.GradientReply.status"));
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // repeated float updated_params = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedFloatParser(_internal_mutable_updated_params(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<::uint8_t>(tag) == 21) {
+          _internal_add_updated_params(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr));
+          ptr += sizeof(float);
         } else {
           goto handle_unusual;
         }
@@ -500,6 +521,11 @@ failure:
     target = stream->WriteStringMaybeAliased(1, _s, target);
   }
 
+  // repeated float updated_params = 2;
+  if (this->_internal_updated_params_size() > 0) {
+    target = stream->WriteFixedPacked(2, _internal_updated_params(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -515,6 +541,19 @@ failure:
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // repeated float updated_params = 2;
+  {
+    std::size_t data_size = std::size_t{4} *
+        ::_pbi::FromIntSize(this->_internal_updated_params_size())
+    ;
+    std::size_t tag_size = data_size == 0
+        ? 0
+        : 1 + ::_pbi::WireFormatLite::Int32Size(
+                            static_cast<int32_t>(data_size))
+    ;
+    total_size += tag_size + data_size;
+  }
 
   // string status = 1;
   if (!this->_internal_status().empty()) {
@@ -540,6 +579,7 @@ void GradientReply::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  _this->_impl_.updated_params_.MergeFrom(from._impl_.updated_params_);
   if (!from._internal_status().empty()) {
     _this->_internal_set_status(from._internal_status());
   }
@@ -562,6 +602,7 @@ void GradientReply::InternalSwap(GradientReply* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.updated_params_.InternalSwap(&other->_impl_.updated_params_);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.status_, lhs_arena,
                                        &other->_impl_.status_, rhs_arena);
 }
