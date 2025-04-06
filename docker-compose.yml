@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  switch:
+    build: ./switch
+    container_name: switch
+    ports:
+      - "50051:50051"
+    networks:
+      - dmlnet
+
+  worker1:
+    build: ./worker
+    container_name: worker1
+    depends_on:
+      - switch
+    networks:
+      - dmlnet
+
+  worker2:
+    build: ./worker
+    container_name: worker2
+    depends_on:
+      - switch
+    networks:
+      - dmlnet
+
+networks:
+  dmlnet:
+    driver: bridge

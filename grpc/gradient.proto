@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package gradient;
+
+service GradientService {
+  rpc SendGradient (GradientRequest) returns (GradientReply);
+}
+
+message GradientRequest {
+  repeated float gradients = 1;
+  string worker_id = 2;
+}
+
+message GradientReply {
+  string status = 1;
+}

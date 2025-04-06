@@ -1,0 +1,3 @@
+/home/shristi/Virtualswitch/worker/build/CMakeFiles/worker_client.dir
+/home/shristi/Virtualswitch/worker/build/CMakeFiles/edit_cache.dir
+/home/shristi/Virtualswitch/worker/build/CMakeFiles/rebuild_cache.dir
