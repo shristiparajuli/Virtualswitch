@@ -1,0 +1,22 @@
+# gRPC Virtual Switch and Worker System (C++)
+
+This project demonstrates a distributed system where a **switch server** receives gradient vectors from **worker clients** using **gRPC in C++**.
+
+---
+## What It Does
+
+- **Worker** simulates sending gradients (floats) to the switch
+- **Switch** receives and logs these gradients
+- Server responds with acknowledgment
+
+---
+
+## 🛠 Requirements
+
+- gRPC and Protobuf (built with CMake and installed)
+- Abseil (installed with CMake)
+- OpenSSL (system-installed)
+- CMake 3.10+
+
+---
+
